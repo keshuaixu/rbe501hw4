@@ -1,0 +1,35 @@
+% joint angles
+q = sym('q', [3 1]);
+
+% position of end of joints
+p = sym('p', [3 3]);
+
+% center of mass of joints
+pm = sym('pm', [3 3]);
+
+% mass of joints [mA mB mC mL]'
+m = sym('m', [4 1]);
+
+% length of arms [A B C]'
+len = sym('len', [3 1]);
+
+
+%% 1
+% theta, d, a, alpha
+dh = horzcat(q, zeros(3,1), len, zeros(3,1))
+T = sym(zeros(4,4,size(dh, 1)));
+for joint=1:size(dh, 1)
+    T(:,:,joint) = dh2mat(dh(joint,1),dh(joint,2),dh(joint,3),dh(joint,4));
+end
+% ans
+T_0_3 = T(:,:,1)*T(:,:,2)*T(:,:,3)
+
+%% 2
+
+x_t = T_0_3 * [0;0;0;1];
+x_t = x_t(1:3,:);
+J_upper = jacobian(x_t, q);
+J_lower = [0,0,0;
+           0,0,0; % thetas contribute to rotation in z
+           1,1,1];
+
