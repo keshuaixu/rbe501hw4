@@ -1,11 +1,14 @@
 % joint angles
 q = sym('q', [3 1]);
 
+% joint velocities
+q_dot = sym('q_dot', [3 1]);
+
 % position of end of joints
 p = sym('p', [3 3]);
 
-% center of mass of joints
-pm = sym('pm', [3 3]);
+% center of mass
+pm = sym('pm', [4 3]);
 
 % mass of joints [mA mB mC mL]'
 m = sym('m', [4 1]);
@@ -45,4 +48,8 @@ J = vertcat(J_upper, J_lower)
 n_len = [0.8;0.4;0.2]; % m
 n_m = [2;1;0.5;1.5]; % kg
 
-K = 
+pm = horzcat([len(1)*0.5*cos(q(1));len(1)*0.5*sin(q(1));0;1], T(:,:,1)*[len(2)*0.5;0;0;1], T(:,:,1)*T(:,:,2)*[len(3)*0.5;0;0;1], T(:,:,1)*T(:,:,2)*T(:,:,3)*[0;0;0;1])
+J_pm = 
+pm_dot = J * q_dot
+
+%K = 
